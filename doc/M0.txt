@@ -1,0 +1,86 @@
+MOVS Rd, #<imm>
+MOVS Rd, Rm
+MOV Rd, Rm
+MOV PC, Rm
+ADDS Rd, Rn, #<imm>
+ADDS Rd, Rn, Rm
+ADD Rd, Rd, Rm
+ADD PC, PC, Rm
+ADDS Rd, Rd, #<imm>
+ADCS Rd, Rd, Rm
+ADD SP, SP, #<imm>
+ADD Rd, SP, #<imm>
+ADR Rd, <label>
+SUBS Rd, Rn, Rm
+SUBS Rd, Rn, #<imm>
+SUBS Rd, Rd, #<imm>
+SBCS Rd, Rd, Rm
+SUB SP, SP, #<imm>
+RSBS Rd, Rn, #0
+MULS Rd, Rm, Rd
+CMP Rn, Rm
+CMN Rn, Rm
+CMP Rn, #<imm>
+ANDS Rd, Rd, Rm
+EORS Rd, Rd, Rm
+ORRS Rd, Rd, Rm
+BICS Rd, Rd, Rm
+MVNS Rd, Rm
+TST Rn, Rm
+LSLS Rd, Rm, #<shift>
+LSLS Rd, Rd, Rs
+LSRS Rd, Rm, #<shift>
+LSRS Rd, Rd, Rs
+ASRS Rd, Rm, #<shift>
+ASRS Rd, Rd, Rs
+RORS Rd, Rd, Rs
+LDR Rd, [Rn, #<imm>]
+LDRH Rd, [Rn, #<imm>]
+LDRB Rd, [Rn, #<imm>]
+LDR Rd, [Rn, Rm]
+LDRH Rd, [Rn, Rm]
+LDRSH Rd, [Rn, Rm]
+LDRB Rd, [Rn, Rm]
+LDRSB Rd, [Rn, Rm]
+LDR Rd, <label>
+LDR Rd, [SP, #<imm>]
+LDM Rn!, {<loreglist>}
+LDM Rn, {<loreglist>}
+STR Rd, [Rn, #<imm>]
+STRH Rd, [Rn, #<imm>]
+STRB Rd, [Rn, #<imm>]
+STR Rd, [Rn, Rm]
+STRH Rd, [Rn, Rm]
+STRB Rd, [Rn, Rm]
+STR Rd, [SP, #<imm>]
+STM Rn!, {<loreglist>}
+PUSH {<loreglist>}
+PUSH {<loreglist>, LR}
+POP {<loreglist>}
+POP {<loreglist>, PC}
+B<cc> <label>
+B <label>
+BL <label>
+BX Rm
+BLX Rm
+SXTH Rd, Rm
+SXTB Rd, Rm
+UXTH Rd, Rm
+UXTB Rd, Rm
+REV Rd, Rm
+REV16 Rd, Rm
+REVSH Rd, Rm
+SVC #<imm>
+CPSID i
+CPSIE i
+MRS Rd, <specreg>
+MSR <specreg>, Rn
+BKPT #<imm>
+SEV
+WFE
+WFI
+YIELD[g]
+NOP
+ISB
+DMB
+DSB

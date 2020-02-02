@@ -1,0 +1,604 @@
+<isa>
+	<instruction>
+		<name>MOVS Rd, #&lt;imm&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0x2000</encoding>
+		<decodefunc>decode_movs_rd_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_movs_rd_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>MOVS Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x0000</encoding>
+		<decodefunc>decode_movs_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_movs_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>MOV Rd, Rm</name>
+		<mask>0xff00</mask>
+		<encoding>0x4600</encoding>
+		<decodefunc>decode_mov_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_mov_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>MOV PC, Rm</name>
+		<mask>0xff8e</mask>
+		<encoding>0x468e</encoding>
+		<decodefunc>decode_mov_pc_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_mov_pc_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADDS Rd, Rn, #&lt;imm&gt;</name>
+		<mask>0xfe00</mask>
+		<encoding>0x1c00</encoding>
+		<decodefunc>decode_adds_rd_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_adds_rd_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADDS Rd, Rn, Rm</name>
+		<mask>0xfe00</mask>
+		<encoding>0x1800</encoding>
+		<decodefunc>decode_adds_rd_rn_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_adds_rd_rn_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADD Rd, Rd, Rm</name>
+		<mask>0xff00</mask>
+		<encoding>0x4400</encoding>
+		<decodefunc>decode_add_rd_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_add_rd_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADD PC, PC, Rm</name>
+		<mask>0xff07</mask>
+		<encoding>0x4407</encoding>
+		<decodefunc>decode_add_pc_pc_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_add_pc_pc_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADDS Rd, Rd, #&lt;imm&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0x3000</encoding>
+		<decodefunc>decode_adds_rd_rd_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_adds_rd_rd_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADCS Rd, Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4140</encoding>
+		<decodefunc>decode_adcs_rd_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_adcs_rd_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADD SP, SP, #&lt;imm&gt;</name>
+		<mask>0xff80</mask>
+		<encoding>0xb000</encoding>
+		<decodefunc>decode_add_sp_sp_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_add_sp_sp_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADD Rd, SP, #&lt;imm&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0xa800</encoding>
+		<decodefunc>decode_add_rd_sp_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_add_rd_sp_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ADR Rd, &lt;label&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0xa000</encoding>
+		<decodefunc>decode_adr_rd_label_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_adr_rd_label_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SUBS Rd, Rn, Rm</name>
+		<mask>0xfe00</mask>
+		<encoding>0x1a00</encoding>
+		<decodefunc>decode_subs_rd_rn_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_subs_rd_rn_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SUBS Rd, Rn, #&lt;imm&gt;</name>
+		<mask>0xfe00</mask>
+		<encoding>0x1e00</encoding>
+		<decodefunc>decode_subs_rd_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_subs_rd_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SUBS Rd, Rd, #&lt;imm&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0x3800</encoding>
+		<decodefunc>decode_subs_rd_rd_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_subs_rd_rd_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SBCS Rd, Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4180</encoding>
+		<decodefunc>decode_sbcs_rd_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_sbcs_rd_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SUB SP, SP, #&lt;imm&gt;</name>
+		<mask>0xff80</mask>
+		<encoding>0xb080</encoding>
+		<decodefunc>decode_sub_sp_sp_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_sub_sp_sp_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>RSBS Rd, Rn, #0</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4240</encoding>
+		<decodefunc>decode_rsbs_rd_rn_0(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_rsbs_rd_rn_0(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>MULS Rd, Rm, Rd</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4340</encoding>
+		<decodefunc>decode_muls_rd_rm_rd(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_muls_rd_rm_rd(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>CMP Rn, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4280</encoding>
+		<decodefunc>decode_cmp_rn_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_cmp_rn_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>CMN Rn, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x42c0</encoding>
+		<decodefunc>decode_cmn_rn_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_cmn_rn_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>CMP Rn, #&lt;imm&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0x2800</encoding>
+		<decodefunc>decode_cmp_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_cmp_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ANDS Rd, Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4000</encoding>
+		<decodefunc>decode_ands_rd_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ands_rd_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>EORS Rd, Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4040</encoding>
+		<decodefunc>decode_eors_rd_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_eors_rd_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ORRS Rd, Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4300</encoding>
+		<decodefunc>decode_orrs_rd_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_orrs_rd_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>BICS Rd, Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4380</encoding>
+		<decodefunc>decode_bics_rd_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_bics_rd_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>MVNS Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x43c0</encoding>
+		<decodefunc>decode_mvns_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_mvns_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>TST Rn, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4200</encoding>
+		<decodefunc>decode_tst_rn_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_tst_rn_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LSLS Rd, Rm, #&lt;shift&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0x0000</encoding>
+		<decodefunc>decode_lsls_rd_rm_shift_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_lsls_rd_rm_shift_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LSLS Rd, Rd, Rs</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4080</encoding>
+		<decodefunc>decode_lsls_rd_rd_rs(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_lsls_rd_rd_rs(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LSRS Rd, Rm, #&lt;shift&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0x0800</encoding>
+		<decodefunc>decode_lsrs_rd_rm_shift_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_lsrs_rd_rm_shift_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LSRS Rd, Rd, Rs</name>
+		<mask>0xffc0</mask>
+		<encoding>0x40c0</encoding>
+		<decodefunc>decode_lsrs_rd_rd_rs(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_lsrs_rd_rd_rs(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ASRS Rd, Rm, #&lt;shift&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0x1000</encoding>
+		<decodefunc>decode_asrs_rd_rm_shift_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_asrs_rd_rm_shift_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ASRS Rd, Rd, Rs</name>
+		<mask>0xffc0</mask>
+		<encoding>0x4100</encoding>
+		<decodefunc>decode_asrs_rd_rd_rs(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_asrs_rd_rd_rs(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>RORS Rd, Rd, Rs</name>
+		<mask>0xffc0</mask>
+		<encoding>0x41c0</encoding>
+		<decodefunc>decode_rors_rd_rd_rs(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_rors_rd_rd_rs(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDR Rd, [Rn, #&lt;imm&gt;]</name>
+		<mask>0xf800</mask>
+		<encoding>0x6800</encoding>
+		<decodefunc>decode_ldr_rd_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldr_rd_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDRH Rd, [Rn, #&lt;imm&gt;]</name>
+		<mask>0xf800</mask>
+		<encoding>0x8800</encoding>
+		<decodefunc>decode_ldrh_rd_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldrh_rd_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDRB Rd, [Rn, #&lt;imm&gt;]</name>
+		<mask>0xf800</mask>
+		<encoding>0x7800</encoding>
+		<decodefunc>decode_ldrb_rd_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldrb_rd_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDR Rd, [Rn, Rm]</name>
+		<mask>0xfe00</mask>
+		<encoding>0x5800</encoding>
+		<decodefunc>decode_ldr_rd_rn_rm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldr_rd_rn_rm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDRH Rd, [Rn, Rm]</name>
+		<mask>0xfe00</mask>
+		<encoding>0x5a00</encoding>
+		<decodefunc>decode_ldrh_rd_rn_rm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldrh_rd_rn_rm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDRSH Rd, [Rn, Rm]</name>
+		<mask>0xfe00</mask>
+		<encoding>0x5e00</encoding>
+		<decodefunc>decode_ldrsh_rd_rn_rm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldrsh_rd_rn_rm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDRB Rd, [Rn, Rm]</name>
+		<mask>0xfe00</mask>
+		<encoding>0x5c00</encoding>
+		<decodefunc>decode_ldrb_rd_rn_rm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldrb_rd_rn_rm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDRSB Rd, [Rn, Rm]</name>
+		<mask>0xfe00</mask>
+		<encoding>0x5600</encoding>
+		<decodefunc>decode_ldrsb_rd_rn_rm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldrsb_rd_rn_rm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDR Rd, &lt;label&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0x4800</encoding>
+		<decodefunc>decode_ldr_rd_label_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldr_rd_label_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDR Rd, [SP, #&lt;imm&gt;]</name>
+		<mask>0xf800</mask>
+		<encoding>0x9800</encoding>
+		<decodefunc>decode_ldr_rd_sp_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldr_rd_sp_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDM Rn!, {&lt;loreglist&gt;}</name>
+		<mask>0xf800</mask>
+		<encoding>0xc800</encoding>
+		<decodefunc>decode_ldm_rn_loreglist_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldm_rn_loreglist_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>LDM Rn, {&lt;loreglist&gt;}</name>
+		<mask>0xf800</mask>
+		<encoding>0xc800</encoding>
+		<decodefunc>decode_ldm_rn_loreglist_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_ldm_rn_loreglist_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>STR Rd, [Rn, #&lt;imm&gt;]</name>
+		<mask>0xf800</mask>
+		<encoding>0x6000</encoding>
+		<decodefunc>decode_str_rd_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_str_rd_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>STRH Rd, [Rn, #&lt;imm&gt;]</name>
+		<mask>0xf800</mask>
+		<encoding>0x8000</encoding>
+		<decodefunc>decode_strh_rd_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_strh_rd_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>STRB Rd, [Rn, #&lt;imm&gt;]</name>
+		<mask>0xf800</mask>
+		<encoding>0x7000</encoding>
+		<decodefunc>decode_strb_rd_rn_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_strb_rd_rn_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>STR Rd, [Rn, Rm]</name>
+		<mask>0xfe00</mask>
+		<encoding>0x5000</encoding>
+		<decodefunc>decode_str_rd_rn_rm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_str_rd_rn_rm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>STRH Rd, [Rn, Rm]</name>
+		<mask>0xfe00</mask>
+		<encoding>0x5200</encoding>
+		<decodefunc>decode_strh_rd_rn_rm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_strh_rd_rn_rm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>STRB Rd, [Rn, Rm]</name>
+		<mask>0xfe00</mask>
+		<encoding>0x5400</encoding>
+		<decodefunc>decode_strb_rd_rn_rm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_strb_rd_rn_rm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>STR Rd, [SP, #&lt;imm&gt;]</name>
+		<mask>0xf800</mask>
+		<encoding>0x9000</encoding>
+		<decodefunc>decode_str_rd_sp_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_str_rd_sp_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>STM Rn!, {&lt;loreglist&gt;}</name>
+		<mask>0xf800</mask>
+		<encoding>0xc000</encoding>
+		<decodefunc>decode_stm_rn_loreglist_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_stm_rn_loreglist_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>PUSH {&lt;loreglist&gt;}</name>
+		<mask>0xff00</mask>
+		<encoding>0xb400</encoding>
+		<decodefunc>decode_push_loreglist_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_push_loreglist_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>PUSH {&lt;loreglist&gt;, LR}</name>
+		<mask>0xff00</mask>
+		<encoding>0xb500</encoding>
+		<decodefunc>decode_push_loreglist_lr_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_push_loreglist_lr_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>POP {&lt;loreglist&gt;}</name>
+		<mask>0xff00</mask>
+		<encoding>0xbc00</encoding>
+		<decodefunc>decode_pop_loreglist_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_pop_loreglist_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>POP {&lt;loreglist&gt;, PC}</name>
+		<mask>0xff00</mask>
+		<encoding>0xbd00</encoding>
+		<decodefunc>decode_pop_loreglist_pc_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_pop_loreglist_pc_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>B&lt;cc&gt; &lt;label&gt;</name>
+		<mask>0xf000</mask>
+		<encoding>0xd000</encoding>
+		<decodefunc>decode_b_cc_label_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_b_cc_label_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>B &lt;label&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0xe000</encoding>
+		<decodefunc>decode_b_label_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_b_label_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>BL &lt;label&gt;</name>
+		<mask>0xf800</mask>
+		<encoding>0xf000</encoding>
+		<decodefunc>decode_bl_label_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_bl_label_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>BX Rm</name>
+		<mask>0xff80</mask>
+		<encoding>0x4700</encoding>
+		<decodefunc>decode_bx_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_bx_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>BLX Rm</name>
+		<mask>0xff80</mask>
+		<encoding>0x4780</encoding>
+		<decodefunc>decode_blx_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_blx_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SXTH Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0xb200</encoding>
+		<decodefunc>decode_sxth_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_sxth_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SXTB Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0xb240</encoding>
+		<decodefunc>decode_sxtb_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_sxtb_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>UXTH Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0xb280</encoding>
+		<decodefunc>decode_uxth_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_uxth_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>UXTB Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0xb2c0</encoding>
+		<decodefunc>decode_uxtb_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_uxtb_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>REV Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0xba00</encoding>
+		<decodefunc>decode_rev_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_rev_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>REV16 Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0xba40</encoding>
+		<decodefunc>decode_rev16_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_rev16_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>REVSH Rd, Rm</name>
+		<mask>0xffc0</mask>
+		<encoding>0xbac0</encoding>
+		<decodefunc>decode_revsh_rd_rm(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_revsh_rd_rm(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SVC #&lt;imm&gt;</name>
+		<mask>0xff00</mask>
+		<encoding>0xdf00</encoding>
+		<decodefunc>decode_svc_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_svc_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>CPSID i</name>
+		<mask>0xffe0</mask>
+		<encoding>0xb660</encoding>
+		<decodefunc>decode_cpsid_i(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_cpsid_i(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>CPSIE i</name>
+		<mask>0xffe0</mask>
+		<encoding>0xb660</encoding>
+		<decodefunc>decode_cpsie_i(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_cpsie_i(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>MRS Rd, &lt;specreg&gt;</name>
+		<mask>0xffe0</mask>
+		<encoding>0xf3e0</encoding>
+		<decodefunc>decode_mrs_rd_specreg_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_mrs_rd_specreg_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>MSR &lt;specreg&gt;, Rn</name>
+		<mask>0xffe0</mask>
+		<encoding>0xf380</encoding>
+		<decodefunc>decode_msr_specreg_rn(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_msr_specreg_rn(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>BKPT #&lt;imm&gt;</name>
+		<mask>0xff00</mask>
+		<encoding>0xbe00</encoding>
+		<decodefunc>decode_bkpt_imm_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_bkpt_imm_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>SEV</name>
+		<mask>0xffff</mask>
+		<encoding>0xbf40</encoding>
+		<decodefunc>decode_sev(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_sev(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>WFE</name>
+		<mask>0xffff</mask>
+		<encoding>0xbf20</encoding>
+		<decodefunc>decode_wfe(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_wfe(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>WFI</name>
+		<mask>0xffff</mask>
+		<encoding>0xbf30</encoding>
+		<decodefunc>decode_wfi(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_wfi(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>YIELD[g]</name>
+		<mask>0xffff</mask>
+		<encoding>0xbf10</encoding>
+		<decodefunc>decode_yield_g_(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_yield_g_(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>NOP</name>
+		<mask>0xffff</mask>
+		<encoding>0xbf00</encoding>
+		<decodefunc>decode_nop(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_nop(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>ISB</name>
+		<mask>0xfff0</mask>
+		<encoding>0xf3b0</encoding>
+		<decodefunc>decode_isb(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_isb(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>DMB</name>
+		<mask>0xfff0</mask>
+		<encoding>0xf3b0</encoding>
+		<decodefunc>decode_dmb(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_dmb(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+	<instruction>
+		<name>DSB</name>
+		<mask>0xfff0</mask>
+		<encoding>0xf3b0</encoding>
+		<decodefunc>decode_dsb(thumbInstruction);</decodefunc>
+		<disasfunc>disasString = disas_dsb(thumbInstruction, thumbInstruction2);</disasfunc>
+	</instruction>
+</isa>
