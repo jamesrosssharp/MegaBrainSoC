@@ -2,6 +2,7 @@
 
 #include <QDialog>
 #include <QKeyEvent>
+#include <QTimer>
 
 #include "megabrain.h"
 
@@ -19,6 +20,11 @@ public slots:
     void onPause();
     void onStep();
     void onReset();
+    void onStepOver();
+
+    void markRefresh() { m_refresh = true; }
+
+    void runRefresh();
 
 public:
     explicit DebuggerDialog(MegaBrain* mb, QWidget *parent = 0);
@@ -32,6 +38,10 @@ private:
 
     Ui::DebuggerDialog *ui;
     MegaBrain*              m_megabrain;
+
+    QTimer* m_timer;
+
+    bool m_refresh = false;
 };
 
 

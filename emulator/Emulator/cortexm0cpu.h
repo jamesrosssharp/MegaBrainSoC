@@ -28,6 +28,8 @@ public:
     std::string dumpRegisters();
     std::string dumpDisas();
 
+    void setStepOver();
+
 private:
 
     uint16_t readWordFromBus(uint32_t address);
@@ -226,6 +228,8 @@ private:
     uint32_t m_cyclesWait;
 
     MegaBrain* m_brain;
+
+    uint32_t m_stepOverPC;
 
 };
 

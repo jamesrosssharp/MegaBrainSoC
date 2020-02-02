@@ -24,6 +24,8 @@ void CortexM0CPU::reset()
     m_flagN = false;
     m_flagV = false;
     m_flagZ = false;
+
+    m_stepOverPC = 0;
 }
 
 void CortexM0CPU::registerSystemBus(SystemBus* bus)
@@ -133,6 +135,17 @@ void CortexM0CPU::clockTick()
     if (m_bus == nullptr)
         throw std::runtime_error("Bus not initialised!");
 
+    // Are we at a break point?
+
+    // This is a dirty hack around 32 bit encodings...
+    if (m_stepOverPC && ((m_registers[kPC] == m_stepOverPC) || (m_registers[kPC] == m_stepOverPC + 2)))
+    {
+        m_stepOverPC = 0;
+        m_brain->pause();
+        return;
+    }
+
+
     // Fetch instruction.
 
     uint16_t thumbInstruction = readWordFromBus(m_registers[kPC]);
@@ -155,6 +168,11 @@ void CortexM0CPU::clockTick()
     decodeAndExecute(thumbInstruction);
 
     //printRegisters();
+}
+
+void CortexM0CPU::setStepOver()
+{
+    m_stepOverPC = m_registers[kPC] + 2;
 }
 
 void CortexM0CPU::decodeAndExecute(uint16_t thumbInstruction)
@@ -195,7 +213,7 @@ std::string CortexM0CPU::dumpDisas()
         else
             ss << "   ";
 
-        ss << std::hex << std::setw(6) << std::setfill('0') << (pc << 1) << ":\t";
+        ss << std::hex << std::setw(6) << std::setfill('0') << pc << ":\t";
         ss << std::hex << std::setw(4) << std::setfill('0') << thumbInstruction << "\t";
 
         ss << disassembleInstructionHelper(thumbInstruction, thumbInstruction2) << std::endl;
@@ -239,7 +257,7 @@ void CortexM0CPU::printRegisters()
     uint32_t rd = (thumbInstruction & 0x0007);\
     uint32_t imm5 = (thumbInstruction & 0x07c0) >> 6;
 
-#define RD_RM_RN uint16_t rm = (thumbInstruction & 0x01c0) >> 7;\
+#define RD_RM_RN uint16_t rm = (thumbInstruction & 0x01c0) >> 6;\
     uint16_t rn = (thumbInstruction & 0x0038) >> 3; \
     uint32_t rd = (thumbInstruction & 0x0007);
 
@@ -566,8 +584,8 @@ std::string CortexM0CPU::disas_adr_rd_label_(uint16_t thumbInstruction, uint16_t
 void CortexM0CPU:: decode_subs_rd_rn_rm(uint16_t thumbInstruction)
 {
     RD_RM_RN
-    uint32_t op1 = m_registers[rm];
-    uint32_t op2 = ~m_registers[rn];
+    uint32_t op1 = m_registers[rn];
+    uint32_t op2 = ~m_registers[rm];
     uint32_t sum;
 
     performAdd(op1, op2, true, m_flagC, m_flagV, m_flagZ, m_flagN, sum);
@@ -581,7 +599,7 @@ std::string CortexM0CPU::disas_subs_rd_rn_rm(uint16_t thumbInstruction, uint16_t
     (void) thumbInstruction2;
     RD_RM_RN
     std::stringstream ss;
-    ss << "ADDS r" << rd << ", r" << rn << ", r" << rm;
+    ss << "SUBS r" << rd << ", r" << rn << ", r" << rm;
     return ss.str();
 }
 
@@ -1358,7 +1376,7 @@ void CortexM0CPU:: decode_ldr_rd_label_(uint16_t thumbInstruction)
 {
     RD_IMM8
 
-    uint32_t addr = m_registers[kPC] + (imm8 << 2);
+    uint32_t addr = m_registers[kPC] + 2 + (imm8 << 2);
     uint32_t word = m_bus->readMem(addr & ~0x3U);
     m_registers[rd] = word;
 }
@@ -2005,7 +2023,7 @@ void CortexM0CPU:: decode_bl_label_(uint16_t thumbInstruction)
 
 
     if (S)
-        address |= 0xfe00;
+        address |= 0xfe000000;
 
     int32_t offset = static_cast<int32_t>(address);
 
@@ -2032,12 +2050,12 @@ std::string CortexM0CPU::disas_bl_label_(uint16_t thumbInstruction, uint16_t thu
     uint32_t address = (S << 24) | (I1 << 23) | (I2 << 22) | (imm10 << 12) | (imm11 << 1);
 
     if (S)
-        address |= 0xfe00;
+        address |= 0xfe000000;
 
     int32_t offset = static_cast<int32_t>(address);
 
     std::stringstream ss;
-    ss << "BX"  << " [PC, #" << offset << "]";
+    ss << "BL"  << " [PC, #" << offset << "]";
     return ss.str();
 }
 
@@ -2116,13 +2134,19 @@ std::string CortexM0CPU::disas_uxth_rd_rm(uint16_t thumbInstruction, uint16_t th
 
 void CortexM0CPU:: decode_uxtb_rd_rm(uint16_t thumbInstruction)
 {
+    RD_RM
 
+    uint8_t val = static_cast<uint8_t>(m_registers[rm] & 0xff);
+    m_registers[rd] = val;
 }
 
 std::string CortexM0CPU::disas_uxtb_rd_rm(uint16_t thumbInstruction, uint16_t thumbInstruction2)
 {
-    return "";
+    RD_RM
 
+    std::stringstream ss;
+    ss << "UXTB r"  << rd <<  ", r" << rm;
+    return ss.str();
 }
 
 //-----------------------------------------------------------------------

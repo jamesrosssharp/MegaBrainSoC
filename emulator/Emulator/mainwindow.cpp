@@ -11,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
     delete m_debugger;
+    delete ui;
 }
 
 void MainWindow::startMegabrain()

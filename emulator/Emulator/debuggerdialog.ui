@@ -15,13 +15,27 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0">
      <property name="sizeConstraint">
       <enum>QLayout::SetMinimumSize</enum>
      </property>
      <property name="spacing">
       <number>6</number>
      </property>
+     <item row="0" column="4">
+      <widget class="QPushButton" name="resetButton">
+       <property name="text">
+        <string>Reset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="memAddress">
+       <property name="text">
+        <string>00000000</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="stepButton">
        <property name="text">
@@ -36,7 +50,36 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="4">
+     <item row="3" column="0" colspan="5">
+      <widget class="QPlainTextEdit" name="disasWidget">
+       <property name="font">
+        <font>
+         <family>Courier 10 Pitch</family>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="runButton">
+       <property name="text">
+        <string>Run</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pauseButton">
+       <property name="text">
+        <string>Pause</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="5">
       <widget class="QPlainTextEdit" name="textWidget">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -62,43 +105,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="resetButton">
-       <property name="text">
-        <string>Reset</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="runButton">
-       <property name="text">
-        <string>Run</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="pauseButton">
-       <property name="text">
-        <string>Pause</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="4">
-      <widget class="QPlainTextEdit" name="disasWidget">
-       <property name="font">
-        <font>
-         <family>Courier 10 Pitch</family>
-         <pointsize>8</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0" colspan="4">
+     <item row="5" column="0" colspan="5">
       <widget class="QPlainTextEdit" name="memoryWidget">
        <property name="font">
         <font>
@@ -110,10 +117,10 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QLineEdit" name="memAddress">
+     <item row="0" column="3">
+      <widget class="QPushButton" name="stepOverButton">
        <property name="text">
-        <string>00000000</string>
+        <string>StepOver</string>
        </property>
       </widget>
      </item>
@@ -196,6 +203,22 @@
     <hint type="sourcelabel">
      <x>315</x>
      <y>369</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stepOverButton</sender>
+   <signal>pressed()</signal>
+   <receiver>DebuggerDialog</receiver>
+   <slot>onStepOver()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>467</x>
+     <y>23</y>
     </hint>
     <hint type="destinationlabel">
      <x>301</x>

@@ -29,6 +29,9 @@ void MegaBrain::start()
 void MegaBrain::pause()
 {
     m_pause = true;
+
+    if (m_cb)
+        m_cb(m_cbdata);
 }
 
 
@@ -51,7 +54,7 @@ void MegaBrain::threadFunc()
 
         tm1.tv_sec = 0 ; //1
 
-        //tm1.tv_sec = 1;
+       // tm1.tv_sec = 1;
         tm1.tv_nsec = 20;
         nanosleep(&tm1, &tm2);
     }
@@ -95,4 +98,10 @@ std::string MegaBrain::dumpMemory(uint32_t address)
 void MegaBrain::hardReset()
 {
     m_cpu.reset();
+}
+
+void MegaBrain::stepOver()
+{
+    m_cpu.setStepOver();
+    start();
 }

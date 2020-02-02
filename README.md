@@ -7,7 +7,7 @@ parsers and compilers in general doing it.
 existing ISA, i.e. thumb, and specifically, the Cortex-M0 instruction set.
     First goal: make an emulator for the Cortex-M0 instruction set and create
 executable, emulatable programs for it. Hello world should suffice. A simple 
-memory mapped UART peripheral is all that is required.
+memory mapped UART peripheral is all that is required. - COMPLETE
     Next goal: start emulating the hardware required for a simple 2d/3d 
 gaming platform. First, a simple blitter engine. Then add sprite channels, and tile channels. Then basic 3D primitives, support for index and vertex buffers, and basic texturing.
     Third goal: write several games including JPTA, Bloodlust, and Kraptor, as well as a doom clone.

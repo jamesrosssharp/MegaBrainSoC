@@ -11,6 +11,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <functional>
 
 class MegaBrain
 {
@@ -27,6 +28,15 @@ public:
     std::string dumpMemory(uint32_t address);
 
     void hardReset();
+    void stepOver();
+
+    using pauseCallback = void (*)(void*);
+
+    void registerPauseCallback(pauseCallback cb, void* data)
+    {
+        m_cb = cb;
+        m_cbdata = data;
+    }
 
 private:
     void threadFunc();
@@ -46,6 +56,9 @@ private:
     bool m_pause;
 
     std::thread m_thread;
+
+    pauseCallback m_cb = nullptr;
+    void* m_cbdata;
 };
 
 #endif // MEGABRAIN_H
