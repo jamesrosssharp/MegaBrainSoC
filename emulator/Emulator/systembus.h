@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <vector>
 
+#include <mutex>
+
 #include "peripheral.h"
 
 class CortexM0CPU;
@@ -11,11 +13,15 @@ class ROM;
 class DDRController;
 class UART;
 class SRAM;
+class SPIController;
+class SysCtl;
+class NVIC;
 
 class SystemBus
 {
 public:
-    SystemBus(CortexM0CPU* cpu, ROM* rom, DDRController* ddr, UART* uart, SRAM* sram);
+    SystemBus(CortexM0CPU* cpu, ROM* rom, DDRController* ddr, UART* uart, SRAM* sram, SPIController* spi0,
+              SysCtl* sysctl, NVIC* nvic);
 
     uint32_t readMem(uint32_t addr);
     void     writeMem(uint32_t addr, uint32_t value);
@@ -49,6 +55,8 @@ private:
     DDRController* m_ddr;
 
     std::vector<PeriphWrapper> m_addresses;
+
+    std::mutex m_mutex;
 
 };
 

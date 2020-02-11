@@ -10,13 +10,17 @@
 
 CortexM0CPU::CortexM0CPU(MegaBrain* brain)  :
     m_bus(nullptr),
+    m_sysctl(nullptr),
+    m_nvic(nullptr),
     m_brain(brain)
 {
-    reset();
 }
 
 void CortexM0CPU::reset()
 {
+    if (!m_sysctl || !m_bus || !m_nvic)
+        throw std::runtime_error("Classes not registered");
+
     for (int i = 0; i < kNRegs; i++)
         m_registers[i] = 0;
 
@@ -26,6 +30,13 @@ void CortexM0CPU::reset()
     m_flagZ = false;
 
     m_stepOverPC = 0;
+
+    m_sysctl->setVTOR(0);
+
+    uint32_t sp = m_bus->readMem(0) & ~3UL;
+
+    m_registers[kSP] = sp;
+    m_registers[kPC] = m_bus->readMem(0x4) & ~1UL;
 }
 
 void CortexM0CPU::registerSystemBus(SystemBus* bus)
@@ -33,9 +44,18 @@ void CortexM0CPU::registerSystemBus(SystemBus* bus)
     m_bus = bus;
 }
 
+void CortexM0CPU::registerSysCtl(SysCtl *sysctl)
+{
+    m_sysctl = sysctl;
+}
+
+void CortexM0CPU::registerNVIC(NVIC *nvic)
+{
+    m_nvic = nvic;
+}
+
 uint16_t CortexM0CPU::readWordFromBus(uint32_t addr)
 {
-
     if (addr & 1)   // TODO: handle this case with appropriate machine exception
         throw std::runtime_error("Unaligned access while fetching instruction!");
 
@@ -48,7 +68,6 @@ uint16_t CortexM0CPU::readWordFromBus(uint32_t addr)
     else {
         return (dword & 0xffff);
     }
-
 }
 
 uint8_t CortexM0CPU::readByteFromBus(uint32_t addr)
@@ -135,7 +154,76 @@ void CortexM0CPU::clockTick()
     if (m_bus == nullptr)
         throw std::runtime_error("Bus not initialised!");
 
+    // Interrupt?
+
+    if (m_interrupt && !m_handlerMode)
+    {
+        m_interrupt = false;
+
+        // Ask NVIC which interrupt occurred
+
+        uint32_t irq = m_nvic->pendingInterrupt();
+
+        if (irq == static_cast<uint32_t>(-1))
+            printf("Spurious interrupt\n");
+        else {
+            m_handlerMode = true;
+
+            // Save context to stack
+
+            /* From ARM documentation:
+            * PushStack()
+            *if CONTROL.SPSEL == '1' && CurrentMode == Mode_Thread then
+            *frameptralign = SP_process<2>;
+            *SP_process = (SP_process - 0x20) AND NOT(ZeroExtend('100',32));
+            *frameptr = SP_process;
+            *else
+            **frameptralign = SP_main<2>;
+            *SP_main = (SP_main - 0x20) AND NOT(ZeroExtend('100',32));
+            *frameptr = SP_main;
+            * // only the stack locations, not the store order, are architected
+            *MemA[frameptr,4]
+            *= R[0];
+            *MemA[frameptr+0x4,4] = R[1];
+            *MemA[frameptr+0x8,4] = R[2];
+            *MemA[frameptr+0xC,4] = R[3];
+            *MemA[frameptr+0x10,4] = R[12];
+            *MemA[frameptr+0x14,4] = LR;
+            *MemA[frameptr+0x18,4] = ReturnAddress();
+            *MemA[frameptr+0x1C,4] = (xPSR<31:10>:frameptralign:xPSR<8:0>);
+            */
+
+            uint32_t sp = m_registers[kSP];
+            uint32_t frameptralign = (sp & 0x4) >> 2;
+            sp -= 0x20;
+            sp &= ~0x7UL; // It seems alignment const is wrong?
+
+            m_registers[kSP] = sp;
+
+            m_bus->writeMem(sp, m_registers[0]);
+            m_bus->writeMem(sp + 4, m_registers[1]);
+            m_bus->writeMem(sp + 8, m_registers[2]);
+            m_bus->writeMem(sp + 12, m_registers[3]);
+            m_bus->writeMem(sp + 16, m_registers[12]);
+            m_bus->writeMem(sp + 20, m_registers[kLR]);
+            m_bus->writeMem(sp + 24, m_registers[kPC]);
+            m_bus->writeMem(sp + 28, frameptralign << 9);
+
+            // Set LR to screwy value determined by arm for exception return
+
+            m_registers[kLR] = 0xfffffff1;
+
+            // Jump to vector
+
+            uint32_t vtor = m_sysctl->getVTOR();
+            uint32_t addr = m_bus->readMem(vtor + 4*(irq + 16));
+
+            m_registers[kPC] = addr & ~0x1UL;
+        }
+    }
+
     // Are we at a break point?
+
 
     // This is a dirty hack around 32 bit encodings...
     if (m_stepOverPC && ((m_registers[kPC] == m_stepOverPC) || (m_registers[kPC] == m_stepOverPC + 2)))
@@ -155,17 +243,39 @@ void CortexM0CPU::clockTick()
 
     // Decode and execute instruction.
 
-    //std::cout << "Thumb instruction: " << std::hex << thumbInstruction << std::endl;
-
-    if (0){
-       // disas
-        uint16_t thumbInstruction2 = readWordFromBus(pc + 2);
-
-        std::cout << disassembleInstructionHelper(thumbInstruction, thumbInstruction2) << std::endl;
-    }
-
     m_registers[kPC] += 2;
     decodeAndExecute(thumbInstruction);
+
+    if (m_handlerMode && ((m_registers[kPC] & 0xf0000000) == 0xf0000000))
+    {
+        m_handlerMode = false;
+
+        // Restore pre-exception state
+
+        uint32_t sp = m_registers[kSP];
+
+
+        /*m_bus->writeMem(sp, m_registers[0]);
+        m_bus->writeMem(sp + 4, m_registers[1]);
+        m_bus->writeMem(sp + 8, m_registers[2]);
+        m_bus->writeMem(sp + 12, m_registers[3]);
+        m_bus->writeMem(sp + 16, m_registers[12]);
+        m_bus->writeMem(sp + 20, m_registers[kLR]);
+        m_bus->writeMem(sp + 24, m_registers[kPC]);
+        m_bus->writeMem(sp + 28, frameptralign << 9);*/
+
+        m_registers[0] = m_bus->readMem(sp);
+        m_registers[1] = m_bus->readMem(sp + 4);
+        m_registers[2] = m_bus->readMem(sp + 8);
+        m_registers[3] = m_bus->readMem(sp + 12);
+        m_registers[12] = m_bus->readMem(sp + 16);
+        m_registers[kLR] = m_bus->readMem(sp + 20);
+        m_registers[kPC] = m_bus->readMem(sp + 24);
+        uint32_t align = m_bus->readMem(sp + 28);
+
+        m_registers[kSP] = sp + 0x20 | ((align >> 9) << 2);
+
+    }
 
     //printRegisters();
 }
@@ -179,8 +289,12 @@ void CortexM0CPU::decodeAndExecute(uint16_t thumbInstruction)
 {
     if (!decodeInstructionHelper(thumbInstruction))
         printf("Could not decode instruction %04x\n", thumbInstruction);
+}
 
-
+void CortexM0CPU::interrupt()
+{
+    m_interrupt = true;
+    m_brain->start(); // in case we are paused with WFI
 }
 
 std::string CortexM0CPU::dumpRegisters()
@@ -525,7 +639,7 @@ void CortexM0CPU:: decode_add_sp_sp_imm_(uint16_t thumbInstruction)
 {
     IMM7
 
-    uint32_t res = m_registers[kSP] + (imm7 << 2);
+    uint32_t res = m_registers[kSP] + static_cast<uint32_t>(imm7 << 2);
     m_registers[kSP] = res;
 }
 

@@ -34,13 +34,17 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         megabrain.cpp \
+        nvic.cpp \
         peripheral.cpp \
         rom.cpp \
         sdcardcontroller.cpp \
         spicontroller.cpp \
+        spidevice.cpp \
         sram.cpp \
+        sysctl.cpp \
         systembus.cpp \
-        uart.cpp
+        uart.cpp \
+        winbondflashmemory.cpp
 
 HEADERS += \
         cortexm0cpu.h \
@@ -50,14 +54,18 @@ HEADERS += \
         i2ccontroller.h \
         mainwindow.h \
         megabrain.h \
+        nvic.h \
         peripheral.h \
         rom.h \
         sdcardcontroller.h \
         spicontroller.h \
+        spidevice.h \
         sram.h \
+        sysctl.h \
         systembus.h \
         thumbinstructions.h \
-        uart.h
+        uart.h \
+        winbondflashmemory.h
 
 FORMS += \
         debuggerdialog.ui \

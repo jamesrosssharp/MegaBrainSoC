@@ -7,6 +7,10 @@
 #include "ddrcontroller.h"
 #include "uart.h"
 #include "sram.h"
+#include "spicontroller.h"
+#include "winbondflashmemory.h"
+#include "sysctl.h"
+#include "nvic.h"
 
 #include <thread>
 #include <mutex>
@@ -44,10 +48,14 @@ private:
 private:
     CortexM0CPU m_cpu;
     ROM m_rom;
-    SystemBus m_bus;
     DDRController m_ddr;
     UART        m_uart;
     SRAM        m_sram;
+    SysCtl       m_sysctl;
+    NVIC         m_nvic;
+    WinBondFlashMemory m_flash;
+    SPIController m_spi0;
+    SystemBus m_bus;
 
     std::mutex m_mutex;
     std::condition_variable m_cond;

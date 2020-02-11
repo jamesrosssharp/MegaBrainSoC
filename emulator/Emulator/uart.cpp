@@ -23,6 +23,7 @@ uint32_t UART::readMem(uint32_t address)
 
 uint32_t UART::writeMem(uint32_t address, uint32_t value)
 {
+
     switch (address)
     {
         case 0x0:

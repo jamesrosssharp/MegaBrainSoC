@@ -2,6 +2,8 @@
 #define CORTEXM0CPU_H
 
 #include "systembus.h"
+#include "sysctl.h"
+#include "nvic.h"
 #include <cstdint>
 
 #include <string>
@@ -14,10 +16,14 @@ public:
     CortexM0CPU(MegaBrain* brain);
 
     void registerSystemBus(SystemBus* bus);
+    void registerSysCtl(SysCtl* sysctl);
+    void registerNVIC(NVIC* nvic);
 
     void clockTick();
 
     void reset();
+
+    void interrupt();
 
     static constexpr int kNRegs = 16;
 
@@ -217,6 +223,8 @@ private:
 private:
 
     SystemBus* m_bus;
+    SysCtl* m_sysctl;
+    NVIC* m_nvic;
 
     uint32_t m_registers[16];
 
@@ -230,6 +238,10 @@ private:
     MegaBrain* m_brain;
 
     uint32_t m_stepOverPC;
+
+    bool    m_interrupt;
+
+    bool    m_handlerMode;
 
 };
 

@@ -8,4 +8,3 @@ ROM.bin:	main.o
 main.o: 	main.c
 	arm-none-eabi-gcc -mcpu=cortex-m0plus -std=c99 -mthumb main.c -c
 
-
