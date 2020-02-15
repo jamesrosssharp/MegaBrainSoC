@@ -36,7 +36,7 @@ void CortexM0CPU::reset()
     uint32_t sp = m_bus->readMem(0) & ~3UL;
 
     m_registers[kSP] = sp;
-    m_registers[kPC] = m_bus->readMem(0x4) & ~1UL;
+    m_registers[kPC] = m_bus->readMem(0x4);
 }
 
 void CortexM0CPU::registerSystemBus(SystemBus* bus)
@@ -226,7 +226,7 @@ void CortexM0CPU::clockTick()
 
 
     // This is a dirty hack around 32 bit encodings...
-    if (m_stepOverPC && ((m_registers[kPC] == m_stepOverPC) || (m_registers[kPC] == m_stepOverPC + 2)))
+    if (m_stepOverPC && (((m_registers[kPC] & ~1UL) == m_stepOverPC) || ((m_registers[kPC] & ~1UL) == m_stepOverPC + 2)))
     {
         m_stepOverPC = 0;
         m_brain->pause();
@@ -236,7 +236,7 @@ void CortexM0CPU::clockTick()
 
     // Fetch instruction.
 
-    uint16_t thumbInstruction = readWordFromBus(m_registers[kPC]);
+    uint16_t thumbInstruction = readWordFromBus((m_registers[kPC] & ~1UL));
 
     m_cyclesWait = 0;
     uint32_t pc = m_registers[kPC];
@@ -319,8 +319,8 @@ std::string CortexM0CPU::dumpDisas()
 
     for (uint32_t pc = static_cast<uint32_t>(std::max(0, static_cast<int>(m_registers[kPC]) - 2*7)); pc < m_registers[kPC] + 2*7; pc += 2)
     {
-        uint16_t thumbInstruction = readWordFromBus(pc);
-        uint16_t thumbInstruction2 = readWordFromBus(pc + 2);
+        uint16_t thumbInstruction = readWordFromBus(pc & ~1UL);
+        uint16_t thumbInstruction2 = readWordFromBus((pc + 2) & ~1UL);
 
         if (pc == m_registers[kPC])
             ss << "==>";
@@ -385,7 +385,7 @@ void CortexM0CPU::printRegisters()
     int32_t imm8 = static_cast<int8_t>(thumbInstruction & 0x00ff);
 
 #define FETCH32_BIT_INSTRUCTION \
-        uint16_t thumbInstruction2 = readWordFromBus(m_registers[kPC]); \
+        uint16_t thumbInstruction2 = readWordFromBus(m_registers[kPC] & ~1UL); \
         m_registers[kPC] += 2; \
         m_cyclesWait ++;
 
@@ -2178,12 +2178,26 @@ std::string CortexM0CPU::disas_bl_label_(uint16_t thumbInstruction, uint16_t thu
 
 void CortexM0CPU:: decode_bx_rm(uint16_t thumbInstruction)
 {
+    RD_RM;
 
+    (void) rd;
+
+    uint32_t target = m_registers[rm];
+
+    //uint32_t retAddr = m_registers[kPC] - 2;
+
+   // m_registers[kLR] = retAddr | 1; // thumb mode
+
+    m_registers[kPC] = target;
 }
 
 std::string CortexM0CPU::disas_bx_rm(uint16_t thumbInstruction, uint16_t thumbInstruction2)
 {
-    return "";
+    RD_RM;
+
+    std::stringstream ss;
+    ss << "BX"  << " r" << rm;
+    return ss.str();
 
 }
 
@@ -2192,13 +2206,29 @@ std::string CortexM0CPU::disas_bx_rm(uint16_t thumbInstruction, uint16_t thumbIn
 
 void CortexM0CPU:: decode_blx_rm(uint16_t thumbInstruction)
 {
+    RD_RM;
 
+    (void) rd;
+
+    uint32_t target = m_registers[rm];
+
+    uint32_t retAddr = m_registers[kPC] - 2;
+
+    m_registers[kLR] = retAddr | 1; // thumb mode
+
+    printf("Jumping to: %x\n", target);
+    fflush(0);
+
+    m_registers[kPC] = target;
 }
 
 std::string CortexM0CPU::disas_blx_rm(uint16_t thumbInstruction, uint16_t thumbInstruction2)
 {
-    return "";
+    RD_RM;
 
+    std::stringstream ss;
+    ss << "BLX"  << " r" << rm;
+    return ss.str();
 }
 
 //-----------------------------------------------------------------------

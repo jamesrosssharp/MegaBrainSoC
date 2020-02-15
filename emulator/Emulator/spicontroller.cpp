@@ -96,7 +96,7 @@ void SPIController::threadFunc()
 
             m_controlReg &= ~GO_FLAG;
 
-            uint16_t bytes = m_controlReg & 0xffff;
+            uint32_t bytes = (m_controlReg & 0xffff) + 1;
 
             // Perform DMA transcation. SPI bus freq is 32MHz, therefore 4Mbytes / second (or sleep 1 microsecond
             // every four bytes bytes)

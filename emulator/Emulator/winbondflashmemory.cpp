@@ -103,7 +103,6 @@ void WinBondFlashMemory::transceive(uint8_t send, uint8_t* receive)
                         m_readAddr |= send;
                         break;
                     default:
-                        printf("Winbnd read: %x\n", m_readAddr);
                         *receive = m_memory.at(m_readAddr & 0x07fffff);
                         m_readAddr++;
                         break;

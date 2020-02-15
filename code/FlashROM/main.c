@@ -10,41 +10,13 @@ void uartputbyte(uint8_t theByte);
 
 void main()
 {
-    uint32_t* nvic_ISER = (uint32_t*)0xE000E100;
-
-    uint32_t* spi0 = (uint32_t*)0x10000100;
-
-    uint8_t dmaPayload[8] = {0x9f, 0x00, 0x00, 0x00, 0x00};
-    uint8_t dmaRx[8];
-    uint8_t dmaPayload2[16] = {0x03, 0x00, 0x00, 0x00};
-    uint8_t dmaRx2[16];
-
-    *nvic_ISER = (uint32_t)0x1UL;
-
-    *(uint32_t*)(spi0 + 1) = (uint32_t)dmaPayload;
-    *(uint32_t*)(spi0 + 2) = (uint32_t)dmaRx;
-    *(uint32_t*)(spi0) = 0x10000 | 4;
-
-    // Halt CPU
+    uartputs("Hello world!\n");
+    
     __asm__ __volatile__ (
         "\twfi\n"
     );
 
-    uartputs("JEDEC ID:");
-    for (int i = 0; i < 4; i++)
-        uartputbyte(dmaRx[i+1]);
-
-    *(uint32_t*)(spi0 + 1) = (uint32_t)dmaPayload2;
-    *(uint32_t*)(spi0 + 2) = (uint32_t)0x20000000 - 4;
-    *(uint32_t*)(spi0) = 0x10000 | 0xffff;
-
-    __asm__ __volatile__ (
-        "\twfi\n"
-    );
-
-    void (*theFunc)() = (void (*)())*((uint32_t*)0x20000004);
-    theFunc();
-
+    while (1);
 }
 
 __attribute__((naked)) void _start() {
