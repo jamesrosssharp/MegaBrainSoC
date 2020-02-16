@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="drawing.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4162">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop4164" />
+      <stop
+         id="stop4188"
+         offset="0.2"
+         style="stop-color:#d40000;stop-opacity:1" />
+      <stop
+         id="stop4186"
+         offset="0.40000001"
+         style="stop-color:#000000;stop-opacity:1" />
+      <stop
+         id="stop4184"
+         offset="0.57332969"
+         style="stop-color:#e9afaf;stop-opacity:1" />
+      <stop
+         style="stop-color:#000080;stop-opacity:1"
+         offset="0.70801562"
+         id="stop4190" />
+      <stop
+         style="stop-color:#800080;stop-opacity:1"
+         offset="1"
+         id="stop4166" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4340"
+       x="-0.0035860001"
+       width="1.007172"
+       y="-0.01835836"
+       height="1.0367167">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.19436914"
+         id="feGaussianBlur4342" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4162"
+       id="linearGradient4350"
+       x1="69.864937"
+       y1="499.11292"
+       x2="200.88322"
+       y2="499.11292"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4162"
+       id="linearGradient4372"
+       x1="131.57236"
+       y1="487.93948"
+       x2="131.57237"
+       y2="509.91031"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="149.85407"
+     inkscape:cy="514.28571"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="704"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-weight:normal;font-size:27.5px;line-height:125%;font-family:Ubuntu;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient4372);fill-opacity:1;stroke:#453832;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'Ubuntu, Italic';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;opacity:1;filter:url(#filter4340)"
+       x="68.571426"
+       y="506.64792"
+       id="text3336"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3338"
+         x="68.571426"
+         y="506.64792"
+         style="fill-opacity:1;fill:url(#linearGradient4372);-inkscape-font-specification:'Ubuntu, Italic';font-family:Ubuntu;font-weight:normal;font-style:italic;font-stretch:normal;font-variant:normal;font-size:27.5px;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%;stroke:#453832;stroke-opacity:1">MegaBrain</tspan></text>
+  </g>
+</svg>

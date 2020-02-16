@@ -1,5 +1,8 @@
 #include "gfxcore.h"
 
+#include "stdlib.h"
+#include "string.h"
+
 /*
  *  GFX Core consists of:
  *
@@ -43,6 +46,8 @@
 
 // TODO Hardware reg description + include generation
 
+#define GFX_MEM_SIZE     16*1024*1024
+
 #define GFXREG_FBCON    0x00
 
 #define GFXREG_DMACON   0X10
@@ -58,7 +63,18 @@
 
 GFXCore::GFXCore()
 {
+    m_gfxmem = new uint8_t[GFX_MEM_SIZE];
+    memset(m_gfxmem, 0x30, GFX_MEM_SIZE);
+}
 
+GFXCore::~GFXCore()
+{
+    delete [] m_gfxmem;
+}
+
+void* GFXCore::getImageData()
+{
+    return m_gfxmem;
 }
 
 uint32_t GFXCore::readMem(uint32_t address)

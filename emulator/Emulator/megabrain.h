@@ -11,6 +11,7 @@
 #include "winbondflashmemory.h"
 #include "sysctl.h"
 #include "nvic.h"
+#include "gfxcore.h"
 
 #include <thread>
 #include <mutex>
@@ -25,6 +26,8 @@ public:
 
     void start();
     void pause();
+
+    GFXCore* getGfxCore() { return &m_gfx; }
 
     void singleStep();
     std::string dumpRegisters();
@@ -55,6 +58,7 @@ private:
     NVIC         m_nvic;
     WinBondFlashMemory m_flash;
     SPIController m_spi0;
+    GFXCore     m_gfx;
     SystemBus m_bus;
 
     std::mutex m_mutex;

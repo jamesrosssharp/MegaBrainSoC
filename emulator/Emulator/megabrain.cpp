@@ -11,7 +11,7 @@ MegaBrain::MegaBrain()  :
     m_sysctl(&m_cpu),
     m_nvic(&m_cpu),
     m_spi0(&m_flash, &m_nvic, kSPI0_IRQ),
-    m_bus(&m_cpu, &m_rom, &m_ddr, &m_uart, &m_sram, &m_spi0, &m_sysctl, &m_nvic),
+    m_bus(&m_cpu, &m_rom, &m_ddr, &m_uart, &m_sram, &m_spi0, &m_sysctl, &m_nvic, &m_gfx),
     m_threadExit(false),
     m_pause(true),
     m_thread([] (MegaBrain* mb) { mb->threadFunc(); }, this)

@@ -16,12 +16,13 @@ class SRAM;
 class SPIController;
 class SysCtl;
 class NVIC;
+class GFXCore;
 
 class SystemBus
 {
 public:
     SystemBus(CortexM0CPU* cpu, ROM* rom, DDRController* ddr, UART* uart, SRAM* sram, SPIController* spi0,
-              SysCtl* sysctl, NVIC* nvic);
+              SysCtl* sysctl, NVIC* nvic, GFXCore* gfx);
 
     uint32_t readMem(uint32_t addr);
     void     writeMem(uint32_t addr, uint32_t value);

@@ -31,6 +31,7 @@ SOURCES += \
         debuggerdialog.cpp \
         gfxcore.cpp \
         i2ccontroller.cpp \
+        igfxdevicedelegate.cpp \
         main.cpp \
         mainwindow.cpp \
         megabrain.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
         debuggerdialog.h \
         gfxcore.h \
         i2ccontroller.h \
+        igfxdevicedelegate.h \
         mainwindow.h \
         megabrain.h \
         nvic.h \
