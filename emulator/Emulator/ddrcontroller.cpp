@@ -7,7 +7,7 @@ DDRController::DDRController()
 
 uint32_t DDRController::readMem(uint32_t address)
 {
-    return m_memory.at((address >> 2) & 0x3ff);
+    return m_memory.at((address >> 2) & 0x3fffff);
 }
 
 uint32_t DDRController::writeMem(uint32_t address, uint32_t value)

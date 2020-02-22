@@ -44,5 +44,25 @@ for pngfile in pngfiles:
 
     cheader.write("};\n")
 
+    cheader.write("const uint8_t %s_data[] = {\n" % thename)
+
+    i = 0
+    for row in rowiter:
+        for sample in row:
+            val = sample
+            c = '\t'
+            d = ''
+            if (i % 8) != 0:
+                c = ','
+            if (i % 8) == 7:
+                d = ','
+            
+            cheader.write("%s0x%02x%s" % (c, val, d))
+            if i % 8 == 7:
+                cheader.write("\n")
+            i += 1
+
+    cheader.write("};\n")
+
     cheader.close()
 

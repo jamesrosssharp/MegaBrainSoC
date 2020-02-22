@@ -123,12 +123,15 @@ void SPIController::threadFunc()
                     uint8_t outByte = 0;
                     m_device->transceive(byte, &outByte);
 
+
                     outword |= (static_cast<uint32_t>(outByte) << 24);
                     dword >>= 8;
 
                     bytes--;
 
                 }
+                //printf("RX word: %02x -> %08x\n", outword, sinkAddr);
+
 
                 m_bus->writeMem(sinkAddr, outword);
 

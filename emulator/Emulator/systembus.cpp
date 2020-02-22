@@ -8,6 +8,7 @@
 #include "spicontroller.h"
 #include "sysctl.h"
 #include "nvic.h"
+#include "gfxcore.h"
 
 #include <mutex>
 
@@ -59,10 +60,10 @@ constexpr uint32_t kSPI0End     = 0x100001ff;
 constexpr uint32_t kSPI0Mask    = 0xffffff00;
 constexpr uint32_t kSPI0MaskVal = 0x10000100;
 
-constexpr uint32_t kGFXStart   = 0x10001000;
-constexpr uint32_t kGFXEnd     = 0x10001fff;
-constexpr uint32_t kGFXMask    = 0xfffff000;
-constexpr uint32_t kGFXMaskVal = 0x10001000;
+constexpr uint32_t kGFXStart   = 0x10010000;
+constexpr uint32_t kGFXEnd     = 0x1001ffff;
+constexpr uint32_t kGFXMask    = 0xffff0000;
+constexpr uint32_t kGFXMaskVal = 0x10010000;
 
 
 
@@ -79,7 +80,7 @@ SystemBus::SystemBus(CortexM0CPU* cpu, ROM* rom, DDRController* ddr, UART* uart,
     m_addresses.emplace_back(kSRAMStart,  kSRAMEnd,  kSRAMMask,  kSRAMMaskVal,  sram);
     m_addresses.emplace_back(kUARTStart, kUARTEnd, kUARTMask, kUARTMaskVal, uart);
     m_addresses.emplace_back(kSPI0Start, kSPI0End, kSPI0Mask, kSPI0MaskVal, spi0);
-    m_addresses.emplace_back(kGFXStart, kGFXEnd, kGFXMask,    kGFXMaskVal, spi0);
+    m_addresses.emplace_back(kGFXStart, kGFXEnd, kGFXMask,    kGFXMaskVal, gfx);
 }
 
 int SystemBus::findPeripheral(uint32_t addr)

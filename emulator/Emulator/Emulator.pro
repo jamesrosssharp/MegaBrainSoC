@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        blitter.cpp \
         cortexm0cpu.cpp \
         cortexm0cpuhelper.cpp \
         ddrcontroller.cpp \
@@ -48,6 +49,7 @@ SOURCES += \
         winbondflashmemory.cpp
 
 HEADERS += \
+        blitter.h \
         cortexm0cpu.h \
         ddrcontroller.h \
         debuggerdialog.h \
