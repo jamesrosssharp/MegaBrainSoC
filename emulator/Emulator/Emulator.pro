@@ -56,6 +56,7 @@ HEADERS += \
         gfxcore.h \
         i2ccontroller.h \
         igfxdevicedelegate.h \
+        interrupts.h \
         mainwindow.h \
         megabrain.h \
         nvic.h \

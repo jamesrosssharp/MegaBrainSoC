@@ -1,11 +1,13 @@
 #include "gfxcore.h"
 
-#include "stdlib.h"
-#include "string.h"
+#include <stdlib.h>
+#include <string.h>
 
 #include "blitter.h"
+#include "systembus.h"
+#include "nvic.h"
 
-#define FBSIZE 0x00300000
+#include "interrupts.h"
 
 /*
  *  GFX Core consists of:
@@ -29,6 +31,10 @@
  *
  *  DMA Controller -
  *      Reg 0x10    Control Reg
+ *              Bits 0-15: dma xfer size (in 32 bit words)
+ *              Bit 16: "GO" (cleared by hardware)
+ *
+ *
  *      Reg 0x14    DMA Source (main mem)
  *      Reg 0x18    DMA Dest (gfx mem)
  *
@@ -67,6 +73,8 @@
 
 // TODO Hardware reg description + include generation
 
+#define FBSIZE 0x00300000
+#define USR_MEM_START 0x00900000
 #define GFX_MEM_SIZE     16*1024*1024
 
 #define GFXREG_FBCON    0x00
@@ -93,10 +101,17 @@
 #define GFXREG_BLTCON_BLTFUNC_COPY 0
 #define GFXREG_BLTCON_BLTFUNC_FILL 1
 
+#define GFXREG_DMACON_GOFLAG 0x010000UL
+#define GFXREG_DMACON_SIZE_MASK 0xffffUL
+#define GFXREG_DMACON_SIZE_SHIFT 0
 
-GFXCore::GFXCore()  :
+
+
+GFXCore::GFXCore(NVIC* nvic)  :
+    m_nvic(nvic),
     m_threadExit(false),
-    m_bltThread([] (GFXCore* gfx) { gfx->blitterThreadFunc(); }, this)
+    m_bltThread([] (GFXCore* gfx) { gfx->blitterThreadFunc(); }, this),
+    m_dmaThread([] (GFXCore* gfx) { gfx->dmaThreadFunc();}, this)
 {
     m_gfxmem = new uint8_t[GFX_MEM_SIZE];
     memset(m_gfxmem, 0x30, GFX_MEM_SIZE);
@@ -105,11 +120,18 @@ GFXCore::GFXCore()  :
     m_bltControlReg = 0;
 }
 
+void GFXCore::registerSystemBus(SystemBus *bus)
+{
+    m_sysbus = bus;
+}
+
 GFXCore::~GFXCore()
 {
     m_threadExit = true;
     m_bltCond.notify_all();
+    m_dmaCond.notify_all();
     m_bltThread.join();
+    m_dmaThread.join();
     delete [] m_gfxmem;
 }
 
@@ -126,37 +148,26 @@ uint32_t GFXCore::readMem(uint32_t address)
 
             break;
         case GFXREG_DMACON:
-
-            break;
+            return m_dmacon;
         case GFXREG_DMASRC:
-
-            break;
+            return m_dmasrc;
         case GFXREG_DMADEST:
-
-            break;
+            return m_dmadest;
         case GFXREG_BLTCON:
-
             return m_bltControlReg;
         case GFXREG_BLTSRCWH:
-
             return m_bltSrcWH;
         case GFXREG_BLTSRCRS:
-
             return m_bltScrRS;
         case GFXREG_BLTDESTXY:
-
             return m_bltDestXY;
         case GFXREG_BLTSRCADDR:
-
             return m_bltSrcAddr;
         case GFXREG_BLTSRCXY:
-
             return m_bltSrcXY;
         case GFXREG_BLTFILLCOL:
-
             return m_bltFillCol;
         case GFXREG_BLTDEPTH:
-
             return m_bltDepth;
         default:
 
@@ -180,12 +191,20 @@ uint32_t GFXCore::writeMem(uint32_t address, uint32_t value)
 
             break;
         case GFXREG_DMACON:
+            m_dmacon = value;
+
+            if (m_dmacon & GFXREG_DMACON_GOFLAG)
+            {
+                m_dmaCond.notify_all();
+            }
 
             break;
         case GFXREG_DMASRC:
+            m_dmasrc = value;
 
             break;
         case GFXREG_DMADEST:
+            m_dmadest = value;
 
             break;
         case GFXREG_BLTCON:
@@ -273,8 +292,43 @@ void GFXCore::blitterThreadFunc()
             switch (func)
             {
                 case GFXREG_BLTCON_BLTFUNC_COPY:
+                {
+
+                    if ((m_bltControlReg & GFXREG_BLTCON_BLTSRC) == 0)
+                    {
+                        // Source: user gfx mem
+
+                        uint32_t x = m_bltDestXY & 0xffff;
+                        uint32_t y = (m_bltDestXY >> 16) & 0xffff;
+
+                        uint32_t w = m_bltSrcWH & 0xffff;
+                        uint32_t h = (m_bltSrcWH >> 16) & 0xffff;
+
+                        uint32_t rs = m_bltScrRS;
+
+                        if ((m_bltControlReg & GFXREG_BLTCON_BLTDEPTH) == 0)
+                        {
+                            uint8_t* src = (m_bltSrcAddr + USR_MEM_START) + m_gfxmem;
+
+                            // Bounds check here so no nastiness?
+
+                            printf("cpy blt from %x to %p %d %d %d %d %d", m_bltSrcAddr, backBufferPtr(), w, rs, h, x, y);
+
+                            blt_Copy_8BPP_32BPP(src, backBufferPtr(), w, rs, h,
+                                                        x, y, m_palette);
+
+                        }
+                        else {
+
+                        }
+
+                    }
+                    else {
+
+                    }
 
                     break;
+                }
                 case GFXREG_BLTCON_BLTFUNC_FILL:
                 {
                     uint32_t x = m_bltDestXY & 0xffff;
@@ -295,9 +349,44 @@ void GFXCore::blitterThreadFunc()
                 }
             }
 
-            //m_nvic->assertIRQ(m_irq, true);
+            m_nvic->assertIRQ(kGFXBLTCON_IRQ, true);
 
         }
     }
 }
 
+void GFXCore::dmaThreadFunc()
+{
+    while (! m_threadExit)
+    {
+        std::unique_lock<std::mutex> lock(m_dmaMutex);
+        m_dmaCond.wait(lock);
+
+        if (m_dmacon & GFXREG_DMACON_GOFLAG)
+        {
+            m_dmacon &= ~GFXREG_DMACON_GOFLAG;
+
+            uint32_t words = (m_dmacon & GFXREG_DMACON_SIZE_MASK) >> GFXREG_DMACON_SIZE_SHIFT;
+
+            uint32_t addrsrc = m_dmasrc & ~0x3UL;
+            uint32_t addrdest = (m_dmadest & ~0x3UL) + USR_MEM_START;
+
+            for (uint32_t i = 0; i < words; i++)
+            {
+                uint32_t w = m_sysbus->readMem(addrsrc);
+
+                if (addrdest < GFX_MEM_SIZE)
+                {
+                    uint32_t* dst = reinterpret_cast<uint32_t*>(&m_gfxmem[addrdest]);
+                    *dst = w;
+                }
+
+                addrsrc += 4;
+                addrdest += 4;
+            }
+
+            m_nvic->assertIRQ(kGFXDMACON_IRQ, true);
+
+        }
+    }
+}

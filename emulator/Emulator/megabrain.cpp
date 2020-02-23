@@ -4,13 +4,14 @@
 
 #include <iomanip>
 
-const int kSPI0_IRQ = 0;
+#include "interrupts.h"
 
 MegaBrain::MegaBrain()  :
     m_cpu(this),
     m_sysctl(&m_cpu),
     m_nvic(&m_cpu),
     m_spi0(&m_flash, &m_nvic, kSPI0_IRQ),
+    m_gfx(&m_nvic),
     m_bus(&m_cpu, &m_rom, &m_ddr, &m_uart, &m_sram, &m_spi0, &m_sysctl, &m_nvic, &m_gfx),
     m_threadExit(false),
     m_pause(true),
@@ -20,6 +21,7 @@ MegaBrain::MegaBrain()  :
     m_cpu.registerSysCtl(&m_sysctl);
     m_cpu.registerNVIC(&m_nvic);
     m_spi0.registerSystemBus(&m_bus);
+    m_gfx.registerSystemBus(&m_bus);
 
     m_cpu.reset();
 }

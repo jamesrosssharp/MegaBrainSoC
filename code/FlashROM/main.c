@@ -38,11 +38,18 @@ void main()
 {
     uartputs("Hello world!\n");
 
+    uint32_t* nvic_ISER = (uint32_t*)0xE000E100;
     uint8_t* gfxbase = (uint8_t*)0x10010000; // uint8_t so we can add byte pointers
 
     // Set palette
     for (int i =0 ; i < 256; i++)
         *(volatile uint32_t*)(gfxbase + (0x300) + (i<<2)) = MegaBrain3_palette[i];
+
+    // Register interrupts with NVIC
+
+    *nvic_ISER = (uint32_t)0x0eUL;
+    
+    // Clear screen
 
     *(volatile uint32_t*)(gfxbase + GFXREG_BLTDESTXY)  = 0x0;
     *(volatile  uint32_t*)(gfxbase + GFXREG_BLTSRCWH)   = (360 << 16) | (640);
@@ -55,6 +62,30 @@ void main()
         "\twfi\n"
     );
 
+    uartputs("Screen cleared!\n");
+   
+    // DMA gfx over to gfx ram
+
+    *(volatile uint32_t*)(gfxbase + GFXREG_DMASRC) = (uint32_t)MegaBrain3_data;
+    *(volatile uint32_t*)(gfxbase + GFXREG_DMADEST) = 0;
+    *(volatile uint32_t*)(gfxbase + GFXREG_DMACON) = (MegaBrain3_width * MegaBrain3_height / 4) | 0x10000;
+
+   __asm__ __volatile__ (
+        "\twfi\n"
+    );
+
+    uartputs("DMA complete!\n");
+  
+    *(volatile uint32_t*)(gfxbase + GFXREG_BLTDESTXY)  = (128 << 16) | (64);
+    *(volatile  uint32_t*)(gfxbase + GFXREG_BLTSRCWH)   = (MegaBrain3_height << 16) | (MegaBrain3_width);
+    *(volatile uint32_t*)(gfxbase + GFXREG_BLTFILLCOL) = 0x00;
+    *(volatile uint32_t*)(gfxbase + GFXREG_BLTDEPTH)   = 0x00;
+    *(volatile uint32_t*)(gfxbase + GFXREG_BLTSRCADDR) = 0x00;
+    *(volatile uint32_t*)(gfxbase + GFXREG_BLTSRCRS) = MegaBrain3_width;
+
+    *(gfxbase + GFXREG_BLTCON) = 0x00000001;
+
+ 
     while (1);
 }
 
@@ -113,11 +144,32 @@ void spiIntHandler()
     uartputs("SPI Int\n");
 }
 
+void fbconHandler()
+{
+    uint32_t* nvic_ICPR = (uint32_t*)(0xE000E380);
+    *nvic_ICPR = 0x2UL;
+}
+
+void bltConHandler()
+{
+    uint32_t* nvic_ICPR = (uint32_t*)(0xE000E380);
+    *nvic_ICPR = 0x4UL;
+}
+
+void dmaConHandler()
+{   
+     uint32_t* nvic_ICPR = (uint32_t*)(0xE000E380);
+    *nvic_ICPR = 0x8UL;
+}
+
 __attribute__ ((section(".vectors")))
 const DeviceVectors exception_table = {
    .pvStack = (void*)0x1100,
    .pfnReset_Handler = &_start, 
-   .IRQ0_handler = &spiIntHandler
+   .IRQ0_handler = &spiIntHandler,
+   .IRQ1_handler = &fbconHandler,
+   .IRQ2_handler = &bltConHandler,
+   .IRQ3_handler = &dmaConHandler
 };
 
 

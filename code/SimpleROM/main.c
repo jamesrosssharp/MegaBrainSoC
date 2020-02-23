@@ -42,6 +42,12 @@ void main()
         "\twfi\n"
     );
 
+    // Set VTOR
+    
+    uint32_t* vtor = (uint32_t*)(0xE000ED08);
+
+    *vtor = 0x20000000;
+    
     void (*theFunc)() = (void (*)())*((uint32_t*)0x20000004);
     theFunc();
 
@@ -99,6 +105,8 @@ void uartputbyte(uint8_t theByte)
 
 void spiIntHandler()
 {
+    uint32_t* nvic_ICPR = (uint32_t*)(0xE000E380);
+    *nvic_ICPR = 0x1UL;
     uartputs("SPI Int\n");
 }
 

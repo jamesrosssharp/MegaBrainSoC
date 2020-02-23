@@ -1,5 +1,7 @@
 // Automatically generated do not edit
 
+const uint32_t MegaBrain3_width = 512;
+const uint32_t MegaBrain3_height = 103;
 const uint32_t MegaBrain3_palette[] = {
 	0x00000000,0x0000ffff,0x000000ff,0x00313062,
 	0x00000000,0x00000052,0x00000083,0x00005552,

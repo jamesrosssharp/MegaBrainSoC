@@ -25,6 +25,9 @@ for pngfile in pngfiles:
     cheader.write("// Automatically generated do not edit")
     cheader.write("\n\n")
 
+    cheader.write("const uint32_t %s_width = %d;\n" % (thename, width))
+    cheader.write("const uint32_t %s_height = %d;\n" % (thename, height))
+
     cheader.write("const uint32_t %s_palette[] = {\n" % thename)
 
     i = 0
